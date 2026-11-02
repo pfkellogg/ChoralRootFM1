@@ -55,6 +55,10 @@ listens on its **MIDI Keys** channel:
 3. Play **F3 to G5**: **F3 to B3** are ChoralRoot's chord keys (they shape the chord, no sound alone), **C4 to G5** the
    roots (they sound). Keys outside F3–G5 do nothing.
 
+**Velocity:** ChoralRoot's **Key Touch** (Options, three past MIDI Keys) is **Fixed** at first: every key plays at
+**Velocity** (100). Set it to **Dynamic** and the keyboard's own velocity plays each key (the FM-1's own keys then sense
+velocity too: Options › Calibrate).
+
 Channel 1 (MIDI Perform) plays the chord sound as a plain synth instead, one note a key; channel 2 is the bass.
 
 ## What changed in the code
@@ -68,7 +72,7 @@ as before:
 | `firmware/src/lcd.c` | 7 | `mirror_lcd(...)` in `lcd_blit` and `lcd_fill`: every rectangle on its way to the LCD |
 | `firmware/src/usb.c` | 13 | where `sysex_byte` finishes a message: a 6-byte `F0 7D 'F' 'S' .. F7` goes to `sm_sysex`; its SysEx send ring's size (`SXQ`, 64) can be set from outside |
 | `firmware/src/main.c` | 3 | `mirror_service()` once a main-loop pass |
-| `firmware/src/choralroot.c` | 9 | the switch, `#include "cr_mirror.c"`, and `SXQ 256`: with 64 the screen went out at ~25 KB/s and a big chord name took 0.9 s to reach the Mac; with 256, ~55 KB/s and 0.3 s |
+| `firmware/src/choralroot.c` | 9 | the switch, `#include "cr_mirror.c"`, and `SXQ 512`: with 64 the screen went out at ~25 KB/s and a big chord name took 0.9 s to reach the Mac; with 512, ~67 KB/s and 0.3 s |
 
 Two new files, both MIT:
 
@@ -80,7 +84,7 @@ Two new files, both MIT:
   [pfkellogg/fm1_open, `screen_mirror/`](https://github.com/pfkellogg/fm1_open/tree/screen-out/screen_mirror), with a
   6 KB buffer (ChoralRoot's RAM is tight).
 
-Cost: about 1 KB of flash and 7.3 KB of RAM (XIP 97.4%, RAM 89.5%). The boot stub is unchanged, so installing it
+Cost: about 1 KB of flash and 8 KB of RAM (XIP 97.4%, RAM 90.5%). The boot stub is unchanged, so installing it
 never rewrites the one flash sector an interruption can't recover from.
 
 ## Building it
