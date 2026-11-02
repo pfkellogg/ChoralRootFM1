@@ -71,6 +71,11 @@ static void lcd_window(uint32_t x0, uint32_t y0, uint32_t x1, uint32_t y1)
 }
 
 static uint16_t lcd_fillbuf[240];
+#if CR_BIG_SCREEN
+static void mirror_lcd(uint32_t x, uint32_t y, uint32_t w, uint32_t h, const uint16_t *px, uint16_t c);   /* cr_mirror.c */
+#else
+#define mirror_lcd(x, y, w, h, px, c) ((void)0)
+#endif
 
 static void lcd_fill(uint32_t x, uint32_t y, uint32_t w, uint32_t h, uint16_t c)
 {
@@ -81,6 +86,7 @@ static void lcd_fill(uint32_t x, uint32_t y, uint32_t w, uint32_t h, uint16_t c)
         w = 240u - x;
     if (y + h > 240u)
         h = 240u - y;
+    mirror_lcd(x, y, w, h, 0, c);       /* the Big Screen mirror, while an app asks (cr_mirror.c) */
     lcd_sync();
     k = 240u / w * w;                       /* whole rows per transfer (narrow fills: one DMA) */
     for (i = 0; i < k; i++)
@@ -97,6 +103,7 @@ static void lcd_blit(uint32_t x, uint32_t y, uint32_t w, uint32_t h, const uint1
 {
     if (!w || !h)
         return;
+    mirror_lcd(x, y, w, h, px, 0);      /* the Big Screen mirror, while an app asks (cr_mirror.c) */
     lcd_window(x, y, x + w - 1u, y + h - 1u);
     lcd_data(px, w * h * 2u);
 }

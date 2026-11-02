@@ -25,6 +25,9 @@
 #endif
 #ifndef FELUCCA_OTA
 #define FELUCCA_OTA 1            /* M-UPGRADE update entry; needs FELUCCA_FLASH */
+#ifndef CR_BIG_SCREEN
+#define CR_BIG_SCREEN 1          /* the FM-1 Big Screen mirror: the screen over USB SysEx to FM-1 Mirror (cr_mirror.c) */
+#endif
 #endif
 #ifndef FELUCCA_OTA_DRYRUN
 #define FELUCCA_OTA_DRYRUN 0
@@ -296,6 +299,9 @@ static int cr_erase_near(void);  /* cr_ui.c: a voice is active or an input came 
 #endif
 #if FELUCCA_CDC
 #include "console.c"
+#endif
+#if CR_BIG_SCREEN
+#include "cr_mirror.c"           /* the FM-1 Big Screen mirror (MIT; before main.c, after usb.c and cr_bank.c's ui) */
 #endif
 #include "main.c"
 #if CR_RAM_ANY                    /* a CR_RAM_* measurement build (cr_ram.h): the veneers of the calls across */

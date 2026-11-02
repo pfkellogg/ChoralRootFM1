@@ -359,6 +359,9 @@ static void fm1_main(void)
 #endif
 #if FELUCCA_OTA
         ed_service();                                   /* web editor SysEx */
+#if CR_BIG_SCREEN
+        mirror_service();                               /* the FM-1 Big Screen mirror (cr_mirror.c) */
+#endif
         ota_service();                                  /* M-UPGRADE handshake */
         if (usb.ota_req) {                              /* M-UPGRADE upgrade command */
             usb.ota_req = 0;

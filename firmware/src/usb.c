@@ -688,6 +688,13 @@ stall:
     sie_wr(S_CSR0, 0x60);
 }
 
+#ifndef CR_BIG_SCREEN
+#define CR_BIG_SCREEN 0                                 /* the FM-1 Big Screen mirror: ChoralRoot's build only */
+#endif
+#if CR_BIG_SCREEN
+int sm_sysex(const uint8_t *m, unsigned n);           /* the Big Screen mirror (cr_mirror.c, screen_mirror.c) */
+#endif
+
 /* SysEx assembly: only short commands matter here */
 static void sysex_byte(uint8_t b)
 {
@@ -737,6 +744,10 @@ static void sysex_byte(uint8_t b)
             ok = usb.sysex[i] == UBOOT_KEY[i];
         if (ok)
             usb.uboot_req = 1;
+#if CR_BIG_SCREEN
+        else if (usb.sx_len == 6u && usb.sysex[1] == 0x7D && usb.sysex[2] == 'F' && usb.sysex[3] == 'S')
+            sm_sysex(usb.sysex, 6u);                    /* the Big Screen mirror's hello (cr_mirror.c) */
+#endif
 #if FELUCCA_OTA
         else if (usb.sx_len == 6u && usb.sysex[1] == 0x22 && usb.sysex[2] == 0x24 && usb.sysex[3] == 0x35 &&
                  usb.sysex[4] == 0x7F)
