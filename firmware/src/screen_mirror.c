@@ -79,9 +79,19 @@ void sm_poll(uint32_t now, sm_send_fn send)
     if (now - sm_heard >= SM_TIMEOUT) sm_live = 0;
     while (sm_live && sm_sent < sm_length) {
         int r = send(sm_buffer + sm_sent + 1, sm_buffer[sm_sent]);
-        if (r == -2) return; /* busy: the rest next time */
+        if (r == -2) break; /* busy: the rest next time */
         if (r) sm_live = 0;
         sm_sent += 1u + sm_buffer[sm_sent];
     }
-    sm_length = sm_sent = 0;
+    if (!sm_live || sm_sent >= sm_length) {
+        sm_length = sm_sent = 0;
+    } else if (sm_sent) {
+        /* Move what's left to the front, so the room it freed takes new rows now (with a small buffer, waiting for
+         * all of it to go first held the screen up too long). Forward copy: the data only moves down. */
+        unsigned i, n = sm_length - sm_sent;
+        for (i = 0; i < n; i++)
+            sm_buffer[i] = sm_buffer[sm_sent + i];
+        sm_length = n;
+        sm_sent = 0;
+    }
 }

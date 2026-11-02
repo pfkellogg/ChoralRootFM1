@@ -12,6 +12,7 @@
 
 static uint16_t mirror_row[240];                 /* one row, back in RGB565 order (the LCD's buffers are byte-swapped) */
 static uint8_t mirror_lost;                      /* rows dropped: the whole screen again when there's room */
+static uint32_t mirror_full_at;                  /* the last whole-screen redraw asked for (at most twice a second) */
 
 /* One SysEx message into usb.c's ring, or -2 (busy) when it has no room for all of it: never waits */
 static int mirror_send(const uint8_t *m, unsigned n)
@@ -26,16 +27,20 @@ static int mirror_send(const uint8_t *m, unsigned n)
 /* lcd.c: a rectangle about to go to the LCD; px (byte-swapped, w x h) or, for a fill, NULL and the colour c */
 static void mirror_lcd(uint32_t x, uint32_t y, uint32_t w, uint32_t h, const uint16_t *px, uint16_t c)
 {
-    uint32_t r, i;
+    uint32_t r, i, start = fm1_ms;
     if (!sm_on() || mirror_lost)
         return;
     for (r = 0; r < h; r++) {
         uint32_t t0 = fm1_ms;
+        if (fm1_ms - start > 400u) {                   /* the host isn't keeping up: never hold the screen longer */
+            mirror_lost = 1;
+            return;
+        }
         for (i = 0; i < w; i++)
             mirror_row[i] = px ? (uint16_t)((px[r * w + i] >> 8) | (px[r * w + i] << 8)) : c;
         while (!sm_rows(mirror_row, x, y + r, w, 1)) {   /* full: send some, briefly; else the whole screen later */
             sm_poll(fm1_ms, mirror_send);
-            if (fm1_ms - t0 > 20u) {
+            if (fm1_ms - t0 > 60u) {                     /* (a row is at most ~10 messages: a few ms at USB speed) */
                 mirror_lost = 1;
                 return;
             }
@@ -47,8 +52,9 @@ static void mirror_lcd(uint32_t x, uint32_t y, uint32_t w, uint32_t h, const uin
 static void mirror_service(void)
 {
     sm_poll(fm1_ms, mirror_send);
-    if (sm_take_full_request() || (mirror_lost && sm_on())) {
+    if (sm_take_full_request() || (mirror_lost && sm_on() && fm1_ms - mirror_full_at >= 500u)) {
         mirror_lost = 0;
+        mirror_full_at = fm1_ms;
         ui.force = 1;                                   /* cr_shim.c ui_draw: cr_draw_invalidate() */
     }
 }
