@@ -43,7 +43,7 @@ int sm_rows(const uint16_t *px, unsigned left, unsigned top, unsigned width, uns
     for (unsigned row = 0; row < rows; ++row, px += width)
         for (unsigned i = 0; i < width;) {
             if (sm_length + 1u + SM_MESSAGE > SM_BUFFER) { /* room for a whole message, or wait */
-                if (!before) return 1; /* bigger than the whole sm_buffer: sm_sent as far as it fits */
+                if (!before) return 1; /* bigger than the whole buffer: sent as far as it fits */
                 sm_length = before;
                 return 0;
             }

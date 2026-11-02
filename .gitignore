@@ -3,3 +3,4 @@ build/
 __pycache__/
 *.fwsc
 recovery-*/*.bin
+dist/
