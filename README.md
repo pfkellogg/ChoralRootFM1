@@ -1,6 +1,6 @@
 > **This fork: ChoralRoot + FM-1 Big Screen** (unofficial, not a ChoralRoot release). The branch `big-screen` adds
 > one thing: the FM-1 sends its screen over USB to [FM-1 Mirror](https://github.com/pfkellogg/fm1-mirror), so it can
-> be shown big. **See [BIG_SCREEN.md](BIG_SCREEN.md)** for installing it, what changed (26 lines in ChoralRoot's own
+> be shown big. **See [BIG_SCREEN.md](BIG_SCREEN.md)** for installing it, what changed (32 lines in ChoralRoot's own
 > files) and playing it from a USB keyboard. The official ChoralRoot is
 > [Quixotic7/ChoralRootFM1](https://github.com/Quixotic7/ChoralRootFM1).
 

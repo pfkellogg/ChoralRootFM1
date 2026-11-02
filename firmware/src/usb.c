@@ -88,7 +88,9 @@ static uint8_t sx_frame[640];
 static uint32_t sx_pos;
 static volatile uint32_t sx_frame_len;
 static volatile uint8_t sx_ready, sx_collect, sx_busy;
-#define SXQ 64u
+#ifndef SXQ
+#define SXQ 64u                                         /* (a power of two; the Big Screen build: 256) */
+#endif
 static uint32_t sx_out_q[SXQ];
 static volatile uint32_t so_w, so_r;
 #ifdef FELUCCA_LOADER

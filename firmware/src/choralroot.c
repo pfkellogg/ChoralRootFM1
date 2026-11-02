@@ -28,6 +28,9 @@
 #ifndef CR_BIG_SCREEN
 #define CR_BIG_SCREEN 1          /* the FM-1 Big Screen mirror: the screen over USB SysEx to FM-1 Mirror (cr_mirror.c) */
 #endif
+#if CR_BIG_SCREEN
+#define SXQ 256u                 /* usb.c's SysEx ring: 64 kept the screen to ~25 KB/s (a big chord name took 0.9 s) */
+#endif
 #endif
 #ifndef FELUCCA_OTA_DRYRUN
 #define FELUCCA_OTA_DRYRUN 0

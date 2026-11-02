@@ -59,16 +59,16 @@ Channel 1 (MIDI Perform) plays the chord sound as a plain synth instead, one not
 
 ## What changed in the code
 
-**26 lines in ChoralRoot's own files**, and only **6 of them do the work**; the other 20 are an on/off switch,
+**32 lines in ChoralRoot's own files**, and only **7 of them do the work**; the rest are an on/off switch,
 `CR_BIG_SCREEN` (1 in `choralroot.c` only), so Felucca and the update loader, which share these files, build exactly
 as before:
 
 | File | Lines | What |
 |---|---|---|
 | `firmware/src/lcd.c` | 7 | `mirror_lcd(...)` in `lcd_blit` and `lcd_fill`: every rectangle on its way to the LCD |
-| `firmware/src/usb.c` | 10 | where `sysex_byte` finishes a message: a 6-byte `F0 7D 'F' 'S' .. F7` goes to `sm_sysex` |
+| `firmware/src/usb.c` | 13 | where `sysex_byte` finishes a message: a 6-byte `F0 7D 'F' 'S' .. F7` goes to `sm_sysex`; its SysEx send ring's size (`SXQ`, 64) can be set from outside |
 | `firmware/src/main.c` | 3 | `mirror_service()` once a main-loop pass |
-| `firmware/src/choralroot.c` | 6 | the switch, and `#include "cr_mirror.c"` |
+| `firmware/src/choralroot.c` | 9 | the switch, `#include "cr_mirror.c"`, and `SXQ 256`: with 64 the screen went out at ~25 KB/s and a big chord name took 0.9 s to reach the Mac; with 256, ~55 KB/s and 0.3 s |
 
 Two new files, both MIT:
 
@@ -80,7 +80,7 @@ Two new files, both MIT:
   [pfkellogg/fm1_open, `screen_mirror/`](https://github.com/pfkellogg/fm1_open/tree/screen-out/screen_mirror), with a
   6 KB buffer (ChoralRoot's RAM is tight).
 
-Cost: about 1 KB of flash and 6.5 KB of RAM (XIP 97.4%, RAM 88.7%). The boot stub is unchanged, so installing it
+Cost: about 1 KB of flash and 7.3 KB of RAM (XIP 97.4%, RAM 89.5%). The boot stub is unchanged, so installing it
 never rewrites the one flash sector an interruption can't recover from.
 
 ## Building it
