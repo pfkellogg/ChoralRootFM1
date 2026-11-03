@@ -12,6 +12,9 @@ the layers and the Options, with FM-1 Mirror on a Mac and a USB keyboard playing
 
 Questions: **pfkellogg@gmail.com**
 
+A second community firmware with the same addition: **[JIANT FM + FM-1 Big Screen](https://github.com/pfkellogg/JIANT/blob/big-screen/BIG_SCREEN.md)**
+(juanjiant's music system; 38 lines, the same 7 doing the work). Watch it: [JIANT FM on a Big Screen](https://youtu.be/7o5s0EDJX5c).
+
 ## Installing it
 
 ChoralRoot's installers install only over firmware they know is safe: **M-VAVE's original V15**, Felucca 1.0+,
