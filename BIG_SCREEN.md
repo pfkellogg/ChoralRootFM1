@@ -12,6 +12,8 @@ the layers and the Options, with FM-1 Mirror on a Mac and a USB keyboard playing
 
 Questions: **pfkellogg@gmail.com**
 
+A fourth, not released yet: **SLOOP + FM-1 Big Screen**, tested on a real FM-1 (2026-11-04). Watch it: [SLOOP on a Big Screen](https://youtu.be/Pd4Bm6JvtkU).
+
 A third community firmware with the same addition: **[Skiff + FM-1 Big Screen](https://github.com/pfkellogg/skiff/blob/big-screen/BIG_SCREEN.md)**;
 all three come from Felucca ([the family tree](https://github.com/pfkellogg/skiff/blob/big-screen/FIRMWARE_FAMILY.md), [video](https://youtu.be/lmMT-FtAoSE)).
 
