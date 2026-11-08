@@ -22,6 +22,11 @@ all three come from Felucca ([the family tree](https://github.com/pfkellogg/skif
 A second community firmware with the same addition: **[JIANT FM + FM-1 Big Screen](https://github.com/pfkellogg/JIANT/blob/big-screen/BIG_SCREEN.md)**
 (juanjiant's music system; 38 lines, the same 7 doing the work). Watch it: [JIANT FM on a Big Screen](https://youtu.be/7o5s0EDJX5c).
 
+> **Newer FM-1s (sold from late 2026, flash chip `0xB36014`): this build doesn't know their chip yet.** It doesn't damage
+> anything, but on a newer FM-1 it keeps your work in memory only (gone when you switch off), and installing another
+> firmware from it may fail. Quixotic7 fixed it in ChoralRoot 0.32 (this build is 0.29), and this build will follow. Check which chip yours has with
+> [M-Flasher](https://github.com/jvitkauskas/m-flasher); on a newer FM-1, use the author's own build, or SLOOP or Melodee + Big Screen, for now. (2026-11-08)
+
 ## Installing it
 
 ChoralRoot's installers install only over firmware they know is safe: **M-VAVE's original V15**, Felucca 1.0+,
